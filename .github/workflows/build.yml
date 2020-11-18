@@ -43,6 +43,6 @@ jobs:
               git init
               git add .
               git commit -m"Github actions build : $GITHUB_RUN_NUMBER"
-              git remote add origin-pages https://${{ secrets.GITHUB_TOKEN }}github.com/${{ github.repository }}.git
+              git remote add origin-pages https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
               git push -f origin-pages master:gh-pages
               
