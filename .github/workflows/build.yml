@@ -12,37 +12,16 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build-and-deploy:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           ref: source
-
-      # Runs a single command using the runners shell
-      - name: Setup zola 
-        run: |
-          wget https://github.com/getzola/zola/releases/download/v0.11.0/zola-v0.11.0-x86_64-unknown-linux-gnu.tar.gz -O /tmp/zola.tar.gz
-          mkdir -p bin
-          tar -xvf /tmp/zola.tar.gz -C bin
-
-      # Runs a set of commands using the runners shell
-      - name: Build site
-        run: bin/zola build
-      
-      - name: Push to gh-pages
-        run: |
-              git config --global user.name github-actions
-              git config --global user.email github-actions@github.com
-              cd public/
-              git init
-              git add .
-              git commit -m"Github actions build : $GITHUB_RUN_NUMBER"
-              git remote add origin-pages https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-              git push -f origin-pages master:gh-pages
-              
+      - name: Build and deploy
+        uses: shalzz/zola-deploy-action@master
+        env:
+          PAGES_BRANCH: gh-pages
+          BUILD_DIR: .
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
