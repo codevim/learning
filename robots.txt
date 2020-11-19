@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://codevim.github.io/learning/sitemap.xml
